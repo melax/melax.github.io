@@ -1,0 +1,150 @@
+<html>
+<head>
+<title> Reinforcement Learning Introduction </title>
+</head>
+
+<body>
+<h1>  Reinforcement Learning </h1>
+In an <a href="tetris.html">AI project</a> we 
+used reinforcement learning to have an agent figure out
+how to play tetris better.
+The writeup here is just a brief introduction to reinforcement learning.
+There may be other explanations to the concepts
+of reinforcement learning that can be found on
+the web or in various AI textbooks.  Anyways, Enjoy...
+
+
+<h2>Introduction </h2>
+Animals cannot be reasoned with.  They dont understand 
+human language or explainations.  Yet somehow
+it is possible to train a pet to stop doing bad
+behavior, such as chewing on furniture, and 
+get it to perform good tasks such as fetching the newspaper.
+The technique used to program this living agent
+is reinforcement learning.   The pet recieves a treat
+when it does something good and is punished when
+it does something bad.   
+<p>
+It is possible to train computer based agents
+using a similar technique of giving "general" rewards and penalties.
+Furthermore, reinforcement learning is able
+to train agents in unknown 
+environments where there may be a delay before
+the effects of actions are understood.  i.e. rewards
+and penalties are not issued right away.
+For example, an agent playing chess may not 
+realize that it has made a "bad move" until
+it loses its queen a few turns later.
+<p>
+
+
+<h2> Value Iteration </h2>
+In a reinforcement learning situation an agent knows
+what state it is in and it has a number of 
+actions it can perform in each state.
+Initilly it doesn't know the value of any of the states.
+For now we will assume that the outcome of performing
+an action at a state is deterministic.
+The agent can therefore update the utility value U() of a state 
+whenever it makes a transition from one state
+to another (by taking what it believes to be the
+best possible action and thus maximizing):
+<code><pre>
+  U(oldstate) = reward + U(newstate)
+</pre></code>
+Thus the agent learns the utility values of states
+as it works its way through the state space.
+The agent may occasionally choose to explore
+suboptimal moves in the hopes of finding better outcomes.
+Only by visiting all the states frequently enough can
+we gaurantee learning the true values of all the states.
+<p>
+As discussed in the deleted homework problem,
+a discount factor is often introduced to prevent
+utility values from diverging and to promote 
+the use of shorter (more efficient) sequences 
+of actions to attain rewards.  
+The update equasion using
+a discout factor gamma is:
+<code><pre>
+  U(oldstate) = reward + gamma * U(newstate)
+</pre></code>
+Normally gamma is set between 0 and 1.
+
+<h2> Q-Learning </h2>
+One assumtion with value iteration is that the effect 
+of an action at a state (resulting state) is deterministic.
+Unfortunately, an environment may not guarantee this.
+A method known as Q-learning augments value iteration
+by maintaining a utility value Q(s,a) for ever action
+at every state.  
+The utility of a state U(s) or Q(s)
+is simply the maximum Q value over 
+all the possible actions at that state.
+The Q-learning algorithm is as follows:
+<code><pre>
+  foreach state s 
+    foreach action a
+      Q(s,a)=0
+  s=currentstate
+  do forever
+      a = select an action
+      do action a
+      r = reward from doing a
+      t = resulting state from doing a
+      Q(s,a) += alpha * (r + gamma * (Q(t)-Q(s,a))
+      s = t                     
+</code></pre>
+Notice that a learning coefficient, alpha, has been
+introduced into the update equasion.  Normally alpha
+is set to a small positive constant less than 1.
+<p>
+A varient of Q-Learning is average learning.  
+With average learning the amount that Q(s,a) is 
+incremented is inversly proportional
+to the number of times that Q(s,a) has been visited.
+i.e. it is equivalent to setting alpha to 1/frequency(Q(s,a)).
+This gives equal weighting to all the "samples" taken
+for that action value pair.  Furthermore this prevents
+ossilation since the amount that a Q value can vary
+will decrease with time.
+
+
+<h2> TD-Learning </h2>
+An extention to value iteration or Q-learning is TD-learning.
+Q-learning only updates utility values based on the transition
+between 2 adjacent states.  When rewards occur infrequently,
+it can take many learning trials for these values to propogate
+to previous states.  TD-learning attempts to expedite this process
+by updating the value of a state using values and rewards from a number
+of future states and actions.  
+For example, the value iteration update equasion
+can be augmented as follows:
+<code><pre>
+  U(s0) = (1-lamda)*sum(pow(lamda,i-1)*(ri + U(si)))
+                     i=1 to i=maxi
+  where
+    si = i'th state in the future from s0
+    ri = reward at i'th future action from s0
+</pre></code>
+The constant lambda adds an exponential decay to
+the influence of future states.  lamda is normally
+set between 0 and 1.  The lower the value of lamda is,
+the less influence future rewards will have.
+
+<h2> Application </h2>
+
+Sounds like a nifty technique eh? 
+There are lots of sexy AI algorithms out there, but have they
+ever been able to do anything useful?  Can we solve a real problem?
+Hmmm.   Well we had a bit of success with a 
+little <a href="tetris.html">tetris</a> game.
+What's interesting is that rather than studying 
+the application domain ourselves and applying our learning
+into the code, the learning algorithm, without prior knowledge
+or strategies, was able to adapt to learn and play effectively.
+<a href="tetris.html">See the application for yourself.</a>
+
+<hr>
+</body>
+</html>
