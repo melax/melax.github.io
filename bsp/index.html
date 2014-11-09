@@ -1,0 +1,81 @@
+<HTML>
+<HEAD>
+<TITLE>Dynamic Plane Shifting BSP Traversal</TITLE>
+</HEAD>
+
+<body>
+    
+<table>
+    <tr>
+        <p><pre><img src="mdkscrn2.gif" width=200 height=70 /> <img src="Image8.gif" width=200 height=70 /> <img src="mdkpic.jpg" width=150 height=70 /> <img src="climb0.jpg" height="70" /> <img src="climb1.jpg" height="70" /> <img src="climb2.jpg" height="70" /> <img src="climb3.jpg" height="70" /> <img src="kurt_run.jpg" height="70" /> <img src="kurt_cyl.jpg" height="70" /> </pre></p>
+    </tr>
+<tr>
+<td valign="top">
+<p><img src="geomod0.jpg" width="100" /></p>
+<p><img src="geomod1.jpg" width="100" /></p>
+<p><img src="geomod2.jpg" width="100" /></p>
+<p><img src="geomod3.jpg" width="100" /></p>
+<p><img src="geomod4.jpg" width="100" /></p>
+<p><img src="geomod5.jpg" width="100" /></p>
+</td>
+<td valign="top">
+<center>
+    <h2>Dynamic Plane Shifting BSP Traversal</h2>
+    <b>Stan Melax - 2001</b>
+</center>
+
+<p>
+    The downloadable zip file: <a href="BSPdemos2001.zip">BSPdemos2001.zip</a> contains two technical demos (melaxbsp.exe and melaxcsg.exe) that show interaction and geomod using bsp trees.  
+    See the readme, help, and cfg files in the zip file for more information about the demos.  Try hitting the 'b' key when running the CSG demo to have some fun.
+</p>
+
+<p> The collision detection of swept volumes is done using bsp plane shifting and the csg boolean operations is done by tree merging.  
+    The academic paper <a href="melaxbsp.pdf"><i>Dynamic Plane Shifting BSP Traversal</i></a>, from GI2000, explains the collision technique for moving objects.
+    A 2001 <a href="http://www.gamasutra.com/view/feature/131508/bsp_collision_detection_as_used_in_.php">gamastra article</a> elaborates on the collision detection in video game settings.
+    Apparently, there's a <a href="http://www.gamasutra.com/view/news/193231/Video_Collision_detection_in_MDK2_NeverWinter_Nights.php"> gdc presentation</a> (but the slides aren't visible).
+  </p>
+<ul>
+    <li>
+        GI <i>Abstract:</i> Interactive 3D applications require fast detection
+        of objects colliding with the environment. One popular
+        method for fast collision detection is to offset the
+        geometry of the environment according to the dimensions
+        of the object, and then represent the object as a point
+        (and the object's movement as a line segment).
+        Previously, this geometry offset has been done in a
+        preprocessing step and therefore requires knowledge
+        of the object's dimensions before runtime. Furthermore,
+        an extra copy of the environment's geometry is required
+        for each shape used in the application. This paper
+        presents a variation of the BSP tree collision algorithm
+        that shifts the planes in order to offset the geometry of
+        the environment at runtime. To prevent unwanted cases
+        where offset geometry protrudes too much, extra plane
+        equations, which bevel solid cells of space during
+        expansion, are added by simply inserting extra nodes at
+        the bottom of the tree. A simple line segment check can
+        be used for collision detection of a moving object of
+        any size against the environment. Only one BSP tree is
+        needed by the application. Successful usage within
+        commercial entertainment software is also discussed.
+    </li>
+</ul>
+<p>  </p>
+
+</td>
+<td valign="top">
+    <p><img src="max_bsp.jpg" width="128"></p>
+    <p><img src="max_roll.jpg" width="128"></p>
+</td>
+</tr>
+</table>
+<hr>
+
+
+
+
+
+</body>
+</HTML>
+
+
