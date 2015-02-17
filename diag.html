@@ -1,0 +1,114 @@
+<html>
+	<head>
+		<title>Diagonalizing Quaternion For 3x3 Symmetric Matrix </title>
+	</head>
+	<body>
+		<h1>
+			3x3 Matrix Diagonalization
+		</h1>
+		<p>Simple <a href="https://github.com/melax/sandbox">C++ code</a> that finds a quaternion which diagonalizes a 3x3 matrix:
+		</p>
+		<p>
+			<code>
+				<pre>
+  Quaternion Diagonalizer(const float3x3 &amp;A)
+  {
+	// A must be a symmetric matrix.
+	// returns quaternion q such that its corresponding matrix Q 
+	// can be used to Diagonalize A
+	// Diagonal matrix D = Q * A * Transpose(Q);  and  A = QT*D*Q
+	// The rows of q are the eigenvectors D's diagonal is the eigenvalues
+	// As per 'row' convention if float3x3 Q = q.getmatrix(); then v*Q = q*v*conj(q)
+	int maxsteps=24;  // certainly wont need that many.
+	int i;
+	Quaternion q(0,0,0,1);
+	for(i=0;i &lt; maxsteps;i++)
+	{
+		float3x3 Q  = q.getmatrix(); // v*Q == q*v*conj(q)
+		float3x3 D  = Q * A * Transpose(Q);  // A = Q^T*D*Q
+		float3 offdiag(D[1][2],D[0][2],D[0][1]); // elements not on the diagonal
+		float3 om(fabsf(offdiag.x),fabsf(offdiag.y),fabsf(offdiag.z)); // mag of each offdiag elem
+		int k = (om.x &gt; om.y &amp;&amp; om.x &gt; om.z)?0: (om.y &gt; om.z)? 1 : 2; // index of largest element of offdiag
+		int k1 = (k+1)%3;
+		int k2 = (k+2)%3;
+		if(offdiag[k]==0.0f) break;  // diagonal already
+		float thet = (D[k2][k2]-D[k1][k1])/(2.0f*offdiag[k]);
+		float sgn = (thet &gt; 0.0f)?1.0f:-1.0f;
+		thet    *= sgn; // make it positive
+		float t = sgn /(thet +((thet &lt; 1.E6f)?sqrtf(sqr(thet)+1.0f):thet)) ; // sign(T)/(|T|+sqrt(T^2+1))
+		float c = 1.0f/sqrtf(sqr(t)+1.0f); //  c= 1/(t^2+1) , t=s/c 
+		if(c==1.0f) break;  // no room for improvement - reached machine precision.
+		Quaternion jr(0,0,0,0); // jacobi rotation for this iteration.
+		jr[k] = sgn*sqrtf((1.0f-c)/2.0f);  // using 1/2 angle identity sin(a/2) = sqrt((1-cos(a))/2)  
+		jr[k] *= -1.0f; // since our quat-to-matrix convention was for v*M instead of M*v
+		jr.w  = sqrtf(1.0f - sqr(jr[k]));
+		if(jr.w==1.0f) break; // reached limits of floating point precision
+		q =  q*jr;  
+		q.Normalize();
+	} 
+	return q;
+  }
+</pre>
+			</code>
+		<P></P>
+		<p>  
+			Diagonalizing a symmetric 3x3 has various useful applications such as 
+			diagonalizing <a href="volint.html">inertia tensors</a>, fitting OBBs, finding 
+			principal axes, etc. The diagonal entries of the diagonalized matrix are the 
+			eigenvalues and the quaternion represents the eigenvectors in that the rows of 
+			the corresponding matrix are the eigenvectors. Note that would be the matrix's 
+			columns for you colum-major people out there.
+                        Note: The actual code on my <a href="https://github.com/melax/sandbox">github site</a> may use some different conventions (naming style and now in column major).
+		</p>
+		<p>
+			This code is kept simple so that it should be easy to grab and incorporate into 
+			your own 3D math library or game application. Rename vector, matrix and quat 
+			types as you see fit. Be aware of any matrix storage (row vs column) and 
+			multiplying order conventions that you might be using. The code assumes 
+			C-language row-major and D3D conventions for the matrix element ordering (for 
+			example v_world=v_local*M). You might have noticed the comments write <code>D=Q*M*Q^T</code>, 
+			whereas a column-centric linear algebra textbook would likely write <code>D=Q^T*M*Q</code>
+			instead. The quaternion association with matrices and multiplication is the 
+			same ordering that literally everybody uses. To the best of my knowledge, this 
+			includes D3DX's quaternion implementation even though its opposite D3D's matrix 
+			ordering which would mean: <code>(Qa*Qb).AsMatrix()==Qb.AsMatrix()*Qa.AsMatrix()</code>
+		. Anyways, the function can easily be modified to conform to your preference if 
+		its different.
+		</p>
+		<p>
+			When you call the routine for a matrix M and get a quaternion q whose 
+			corresponding matrix is Q and then compute D=Q*M*Q^T you will probably notice 
+			that the off diagonal elements of D are not quite zero. The internals of the 
+			algorithm are all 32bit float. Changing this to double might improve the 
+			result. Even then, the resulting quaternion will be represented with finite 
+			precision (32bit xyzw). For the functions main loop, I just hardcoded an 
+			iteration limit of 24. No good reason for that number. Hurling dozens of random 
+			symmetric matricies at the function, i didn't see it use more than 7 before 
+			satisfying one of the exit conditions. Note the random entries were initialized 
+			with (float)rand()/(float)rand(). Of what I saw, the offdiagonal elements were 
+			always many orders of magnitude smaller than the largest diagonal element and 
+			smaller than the smallest diagonal. Further coverage testing in more extreme 
+			cases might be useful.
+		</p>
+		<p>
+			To give credit where credit is due, some guy named Jacobi figured out this 
+			diagonalization technique a long time ago. In an iterative fashion, the off 
+			diagonal elements are simply "rotated away". The algebra to derive all this is 
+			a bit trickier since you have the matrices on both sides (the diagonalizer and 
+			its inverse). Numerical recipes 11.1, <i>Jacobi Transformations of a Symmetric 
+				Matrix</i>, shows all the derivation including that clever t=s/c 
+			substitution which leads to the formula showing how to compute the sin and cos 
+			for the next incremental rotation. The Numerical Recipes version makes 
+			additional speed optimizations and adds complexity that seems unnecessary for 
+			the 3x3 case. I just ignored all that and just used Jacobi's raw idea but 
+			incrementally build up a quaternion at each iteration instead of the matrix 
+			sequence. (Using the half-angle identity makes it easy to construct the delta 
+			quaternion directly.) Consequently the resulting code is fairly simple and 
+			should jive with your typical game engine math library.
+			Special thanks to John Schultz for his collaboration on gamedev.net and 
+			for trying out the code and comparing results to alternative implementations.
+		</p>
+		<h6>S Melax</h6>
+		<hr>
+	</body>
+</html>
