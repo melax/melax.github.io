@@ -7,8 +7,11 @@
   <style>
     html, body {
       height: 100%;
+      min-height: 100vh;
+      width: 100vw;
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
     }
     body {
       min-height: 100vh;
@@ -29,6 +32,8 @@
       padding: 3vw 4vw;
       border-radius: 2vw;
       box-shadow: 0 0 40px 10px rgba(0,0,0,0.5);
+      flex-wrap: wrap;
+      justify-content: center;
     }
     .character {
       display: flex;
@@ -38,6 +43,9 @@
       cursor: pointer;
       position: relative;
       z-index: 1;
+      background: rgba(0,0,0,0.15);
+      margin: 1vw;
+      box-sizing: border-box;
     }
     .character img {
       width: 160px;
@@ -79,10 +87,16 @@
       transition: opacity 0.3s;
     }
     @media (max-width: 900px) {
+      html, body {
+        height: 100%;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
       body {
         overflow-y: auto;
-        height: auto;
+        height: 100vh;
         min-height: 100vh;
+        max-height: 100vh;
       }
       .character-select-container {
         flex-wrap: wrap;
@@ -97,7 +111,7 @@
         width: 44vw;
         max-width: 180px;
         min-width: 120px;
-        margin-bottom: 2vw;
+        margin: 2vw 1vw;
       }
       .character img {
         width: 100%;
@@ -126,6 +140,7 @@
         width: 48vw;
         max-width: 140px;
         min-width: 80px;
+        margin: 2vw 1vw;
       }
       .character img {
         border-radius: 12px;
