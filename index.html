@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Character Selection</title>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=MedievalSharp&display=swap" rel="stylesheet">
   <style>
     html, body {
       height: 100%;
@@ -57,13 +58,17 @@
       background: transparent;
       transition: box-shadow 0.3s, border-color 0.3s;
     }
-    .character-label {
-      margin-top: 1em;
-      color: #fff;
-      font-size: 1.3em;
-      font-family: 'Georgia', serif;
+    .character-label, .character:visited .character-label, .character:active .character-label, .character:focus .character-label, .character:hover .character-label {
+      font-family: 'UnifrakturMaguntia', 'MedievalSharp', fantasy, serif;
+      color: #ffe066;
+      text-decoration: none !important;
+      font-size: 1.7em;
+      font-weight: bold;
       letter-spacing: 1px;
-      text-shadow: 0 2px 8px #000;
+      margin-top: 0.7em;
+    }
+    .character, .character:visited, .character:active, .character:focus, .character:hover {
+      text-decoration: none !important;
     }
     .character:hover {
       transform: scale(1.18) translateY(-18px);
