@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cassandra - Coming Soon</title>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #000;
+      color: #ffe066;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'UnifrakturCook', fantasy, serif;
+      margin: 0;
+    }
+    .coming-soon {
+      font-size: 3em;
+      margin-bottom: 3em;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 12px #000, 0 0 8px #ffe066;
+    }
+    .go-back {
+      display: flex;
+      align-items: center;
+      color: #ffe066;
+      font-size: 1.5em;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      gap: 0.5em;
+      font-weight: bold;
+      text-shadow: 0 2px 8px #000;
+      transition: color 0.2s;
+      letter-spacing: 1px;
+    }
+    .go-back:hover {
+      color: #fff700;
+    }
+    .triangle {
+      width: 0; height: 0;
+      border-top: 16px solid transparent;
+      border-bottom: 16px solid transparent;
+      border-right: 24px solid #ffe066;
+      margin-right: 0.5em;
+    }
+  </style>
+</head>
+<body>
+  <div class="coming-soon">Coming soon...</div>
+  <a href="/" class="go-back"><span class="triangle"></span>Go Back</a>
+</body>
+</html> 
